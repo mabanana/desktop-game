@@ -1,5 +1,3 @@
-# Create this as project.godot configuration or in your main scene script
-
 extends Node2D
 
 var window_width: int
@@ -7,9 +5,22 @@ var window_height: int
 var screen: Rect2
 var taskbar_height: int
 
+var character_scene: PackedScene
+
+@export var timer: Timer
+@export var spawn_cd: float
+
+var char_name_list = ["goblin_archer", "halfling_assassin"]
+
 func _ready():
 	_setup_window()
 	$Area2D.body_exited.connect(_on_body_leave_screen)
+	character_scene = load("res://character_body.tscn")
+	timer.start(spawn_cd)
+	timer.timeout.connect(func():
+		var spawn = get_next_spawn()
+		spawn_character(spawn.char_name, spawn.team)
+		)
 
 func  _setup_window():
 	_update_screen_size()
@@ -41,4 +52,21 @@ func _update_tb_position(value: float = 0) -> void:
 
 func _on_body_leave_screen(body: Node2D):
 	if body is CharacterBody2D:
-		body.position = Vector2i(0, window_height - body.sprite.get_rect().size.y)
+		var x = 0 if body.position.x > 0 else window_width
+		body.position = Vector2i(x, window_height)
+
+func spawn_character(name, team = 0):
+	var node: CharacterBody = character_scene.instantiate()
+	node.char_name = name
+	node.team = team
+	if node.team != 0:
+		node.position.x = window_width
+	add_child(node)
+
+func get_next_spawn():
+	var char_name = char_name_list[randi_range(0, len(char_name_list) - 1)]
+	var team = randi_range(0, 1)
+	return {
+		"char_name" : char_name,
+		"team" : team,
+	}
