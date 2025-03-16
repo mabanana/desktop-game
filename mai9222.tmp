@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://d2lj8ap5bnokg"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_u5gi2"]
+[ext_resource type="Script" path="res://character.gd" id="2_l1hxs"]
+[ext_resource type="Texture2D" uid="uid://dutcmd84msfei" path="res://GoblinArcher.png" id="3_mxi7h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qm82i"]
+size = Vector2(12, 12)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_u5gi2")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(100, 100)
+scale = Vector2(10, 10)
+script = ExtResource("2_l1hxs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_qm82i")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("3_mxi7h")
+offset = Vector2(0, -2)
+hframes = 4

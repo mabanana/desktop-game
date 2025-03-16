@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://d2lj8ap5bnokg"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_u5gi2"]
+[ext_resource type="Script" path="res://character.gd" id="2_l1hxs"]
+[ext_resource type="Texture2D" uid="uid://dutcmd84msfei" path="res://GoblinArcher.png" id="3_mxi7h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_018mg"]
+size = Vector2(3000, 300)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qm82i"]
+size = Vector2(12, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qw8h3"]
+size = Vector2(1920, 300)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_u5gi2")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(1000, 450)
+shape = SubResource("RectangleShape2D_018mg")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(0, 300)
+scale = Vector2(5, 5)
+script = ExtResource("2_l1hxs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_qm82i")
+
+[node name="CharacterSprite" type="Sprite2D" parent="CharacterBody2D"]
+scale = Vector2(1, 1)
+texture = ExtResource("3_mxi7h")
+offset = Vector2(0, -2)
+hframes = 4
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(960, 150)
+shape = SubResource("RectangleShape2D_qw8h3")
