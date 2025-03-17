@@ -12,9 +12,10 @@ func _ready():
 	if not char_name:
 		queue_free()
 	sprite.play(char_name)
-	hitbox.body_entered.connect(_on_collide_with_enemy)
 	if team != 0:
 		sprite.flip_h = true
+	
+	hitbox.body_entered.connect(_on_collide_with_enemy)
 
 func _physics_process(delta):
 	var direction = Vector2(1,1) if team == 0 else Vector2(-1, 1)

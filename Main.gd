@@ -26,7 +26,7 @@ func _ready():
 	screen_area.body_exited.connect(_on_body_leave_screen)
 	
 	character_scene = load("res://character_body.tscn")
-	timer.start(spawn_cd)
+	timer.start(0)
 	timer.timeout.connect(func():
 		var spawn = get_next_spawn()
 		spawn_character(spawn.char_name, spawn.team)
@@ -50,8 +50,10 @@ func _update_screen_size(screen_height) -> void:
 	window_width = screen.size.x - x_padding
 	window_height = screen_height
 	print(window_width, ", ", window_height)
-	get_window().set_size(Vector2(window_height, window_width))
-	screen_area_rect.shape.set_size(Vector2(window_height, window_width))
+	get_window().set_size(Vector2(window_width, window_height))
+	screen_area_rect.shape.set_size(Vector2(window_width, window_height))
+	screen_area.position = Vector2(window_width, window_height) / 2
+	print(screen_area_rect.shape.size, screen_area.position)
 	DisplayServer.window_set_size(Vector2i(window_width, window_height))
 	floor_body.position = Vector2(window_width/2, window_height + 150)
 	print(floor_body.position)
