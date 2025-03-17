@@ -1,6 +1,6 @@
 [gd_scene load_steps=75 format=3 uid="uid://cwvkbn6r8ewk7"]
 
-[ext_resource type="Script" path="res://character.gd" id="1_kv04h"]
+[ext_resource type="Script" path="res://character_body.gd" id="1_kv04h"]
 [ext_resource type="Texture2D" uid="uid://dutcmd84msfei" path="res://Assets/GoblinArcher.png" id="2_kb15p"]
 [ext_resource type="Texture2D" uid="uid://cin2qkp2xygbu" path="res://Assets/HalflingAssassin.png" id="3_bl6ij"]
 [ext_resource type="Texture2D" uid="uid://bhiwvl5o0allh" path="res://Assets/GoblinFanatic.png" id="3_qs6m5"]
