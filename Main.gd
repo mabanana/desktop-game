@@ -33,7 +33,7 @@ func _ready():
 	timer.timeout.connect(game_controller._on_spawn_cd_timeout)
 	timer.start(0)
 	screen_area.body_exited.connect(game_controller._on_body_leave_screen)
-	set_window_height_offset(100)
+	#set_window_height_offset(100)
 
 func  _initialize_window():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
