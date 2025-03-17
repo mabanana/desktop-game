@@ -80,7 +80,6 @@ animations = [{
 size = Vector2(20, 15)
 
 [node name="CharacterBody" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "hitbox")]
-position = Vector2(0, 300)
 scale = Vector2(5, 5)
 script = ExtResource("1_kv04h")
 char_name = "goblin_archer"
@@ -97,5 +96,4 @@ animation = &"halfling_assassin"
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_iykqa")
