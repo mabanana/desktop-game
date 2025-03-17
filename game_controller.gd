@@ -17,9 +17,8 @@ func _on_body_leave_screen(body: Node2D):
 
 func spawn_character(char):
 	var node: CharacterBody = character_scene.instantiate()
-	node.char_name = char.char_name
-	node.team = char.team
-	if node.team != 0:
+	node.character = char
+	if char.team != 0:
 		node.position.x = main.window_width
 	main.add_child(node)
 

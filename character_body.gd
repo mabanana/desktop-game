@@ -1,20 +1,26 @@
 extends CharacterBody2D
 class_name CharacterBody
 
+var character: Character
 var team: int
 var move_speed = 200.0
+var char_name: String
+var power: float
 
-@export var char_name: String
 @export var sprite: AnimatedSprite2D
 @export var hitbox: Area2D
 
 func _ready():
-	if not char_name:
+	if not character:
+		print("No character resource on CharacterBody, Freeing.")
 		queue_free()
-	sprite.play(char_name)
+	char_name = character.char_name
+	team = character.team
+	move_speed = character.move_speed
+	power = character.power
+	sprite.play(character.char_name)
 	if team != 0:
 		sprite.flip_h = true
-	
 	hitbox.body_entered.connect(_on_collide_with_enemy)
 
 func _physics_process(delta):
@@ -29,8 +35,19 @@ func _physics_process(delta):
 func _on_collide_with_enemy(body):
 	if body.is_queued_for_deletion() or is_queued_for_deletion():
 		return
+	var winner
+	var loser
 	if body is CharacterBody and body.team != team:
-		if randi_range(0,1):
-			queue_free()
+		if attack() > body.attack():
+			winner = self
+			loser = body
 		else:
-			body.queue_free()
+			winner = body
+			loser = self
+		print("%s %s has been killed by %s" % [team, loser.char_name, winner.char_name])
+		loser.queue_free()
+
+func attack():
+	var roll = randi_range(0, power)
+	print("%s attacked for %s" % [char_name, roll])
+	return roll
