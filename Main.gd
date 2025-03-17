@@ -18,7 +18,7 @@ var character_scene: PackedScene
 @export var screen_area_rect: CollisionShape2D
 
 
-var char_name_list = ["goblin_archer", "halfling_assassin"]
+var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "goblin_occultist", "goblin_wolf_rider", "halfling_assassin", "halfling_bard", "halfling_ranger", "halfling_rogue", "halfling_slinger", "lizard_archer", "lizard_beast", "lizard_gladiator", "lizard_scout"]
 
 func _ready():
 	# TODO: Changing height in project settings does not scale game correctly
