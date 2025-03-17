@@ -2,27 +2,30 @@ extends Node2D
 
 var window_width: int
 var window_height: int
-var screen: Rect2
+var screen_rect: Rect2
 var taskbar_height: int
+var window_offset: int
 
-var character_scene: PackedScene
 @export_category("Game Parameters")
 @export var screen_height: int
 @export var spawn_cd: float
 @export var x_padding: int
+@export var ground_height_offset: int
+
 
 @export_category("Child Nodes")
 @export var timer: Timer
 @export var floor_body: StaticBody2D
+@export var floor_body_shape: CollisionShape2D
 @export var screen_area: Area2D
-@export var screen_area_rect: CollisionShape2D
+@export var screen_area_shape: CollisionShape2D
 
-
+var character_scene: PackedScene
 var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "goblin_occultist", "goblin_wolf_rider", "halfling_assassin", "halfling_bard", "halfling_ranger", "halfling_rogue", "halfling_slinger", "lizard_archer", "lizard_beast", "lizard_gladiator", "lizard_scout"]
 
 func _ready():
 	# TODO: Changing height in project settings does not scale game correctly
-	_setup_window()
+	_initialize_window()
 	screen_area.body_exited.connect(_on_body_leave_screen)
 	
 	character_scene = load("res://character_body.tscn")
@@ -31,41 +34,43 @@ func _ready():
 		var spawn = get_next_spawn()
 		spawn_character(spawn.char_name, spawn.team)
 		)
+	set_window_height_offset(100)
 
-func  _setup_window():
-	_update_screen_size(screen_height)
+func  _initialize_window():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)
-	#DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_MOUSE_PASSTHROUGH, true)
-	
 	# TODO: Setup mouse passthrough
-	_update_tb_position(0)
+	_update_window_size()
 
-func _update_screen_size(screen_height) -> void:
-	# Example: If window size changes (e.g., screen resolution change)
-	
-	screen = DisplayServer.screen_get_usable_rect()
-	window_width = screen.size.x - x_padding
+func _update_window_size() -> void:
+	screen_rect = DisplayServer.screen_get_usable_rect()
+	window_width = screen_rect.size.x - x_padding
 	window_height = screen_height
-	print(window_width, ", ", window_height)
-	get_window().set_size(Vector2(window_width, window_height))
-	screen_area_rect.shape.set_size(Vector2(window_width, window_height))
-	screen_area.position = Vector2(window_width, window_height) / 2
-	print(screen_area_rect.shape.size, screen_area.position)
 	DisplayServer.window_set_size(Vector2i(window_width, window_height))
-	floor_body.position = Vector2(window_width/2, window_height + 150)
-	print(floor_body.position)
 	_update_screen_position()
+	_update_game_area()
+	_update_floor_body()
 
+func _update_game_area():
+	screen_area_shape.shape.set_size(Vector2(window_width, window_height))
+	screen_area.position = Vector2(window_width, window_height) / 2
+
+func _update_floor_body():
+	floor_body_shape.shape.set_size(Vector2(window_width * 2, 300))
+	var x_offset = window_width
+	var y_offset = (floor_body_shape.shape.size.y) / 2
+	y_offset -= ground_height_offset
+	floor_body.position = Vector2(window_width/2, window_height + y_offset)
+	
 func _update_screen_position() -> void:
-	var screen_y = screen.size.y + screen.position.y - taskbar_height - window_height
+	var screen_y = screen_rect.size.y + screen_rect.position.y - taskbar_height - window_height - window_offset
 	DisplayServer.window_set_position(Vector2i(x_padding / 2, screen_y))
 
-func _update_tb_position(value: float = 0) -> void:
-	value = int(value * 10)
-	taskbar_height = value
+func set_window_height_offset(value: float = 0) -> void:
+	value = int(value)
+	window_offset = value
 	_update_screen_position()
 
 func _on_body_leave_screen(body: Node2D):
