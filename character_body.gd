@@ -8,7 +8,9 @@ var char_name: String
 var power: float
 
 @export var sprite: AnimatedSprite2D
+@export var body_shape: CollisionShape2D
 @export var hitbox: Area2D
+@export var hitbox_shape: CollisionShape2D
 
 func _ready():
 	if not character:
@@ -19,6 +21,20 @@ func _ready():
 	move_speed = character.move_speed
 	power = character.power
 	sprite.play(character.char_name)
+	setup_collisions()
+	# note: all sprite frames have consistent sizing between frames
+
+func setup_collisions():
+	var sprite_texture = sprite.sprite_frames.get_frame_texture(character.char_name,0)
+	var sprite_size = sprite_texture.get_size()
+	body_shape.shape = RectangleShape2D.new()
+	body_shape.shape.size = sprite_size
+	
+	hitbox_shape.shape = RectangleShape2D.new()
+	var hitbox_size = sprite_size
+	hitbox_size.y += 4
+	hitbox_size.x += 4 # TODO: Add attack range
+	hitbox_shape.shape.size = hitbox_size
 	if team != 0:
 		sprite.flip_h = true
 	hitbox.body_entered.connect(_on_collide_with_enemy)

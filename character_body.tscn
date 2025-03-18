@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cvndwcjefnsfk" path="res://Assets/LizardfolkGladiator.png" id="14_k0lhw"]
 [ext_resource type="Texture2D" uid="uid://crtcf271jx5d1" path="res://Assets/LizardfolkScout.png" id="15_08sjn"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qm82i"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bs7wa"]
 size = Vector2(12, 12)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h43o0"]
@@ -163,21 +163,21 @@ region = Rect2(33, 4, 13, 12)
 atlas = ExtResource("10_nf07f")
 region = Rect2(49, 4, 13, 12)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_shxro"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ckhn8"]
 atlas = ExtResource("11_sokli")
-region = Rect2(0, 1, 15, 15)
+region = Rect2(1, 1, 13, 15)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_76adp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1csp"]
 atlas = ExtResource("11_sokli")
-region = Rect2(16, 1, 15, 15)
+region = Rect2(17, 1, 13, 15)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dy4at"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vta2h"]
 atlas = ExtResource("11_sokli")
-region = Rect2(32, 1, 15, 15)
+region = Rect2(33, 1, 13, 15)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_v4f50"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_htxaa"]
 atlas = ExtResource("11_sokli")
-region = Rect2(48, 1, 15, 15)
+region = Rect2(49, 1, 13, 15)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_excey"]
 atlas = ExtResource("12_0b48j")
@@ -400,16 +400,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_shxro")
+"texture": SubResource("AtlasTexture_ckhn8")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_76adp")
+"texture": SubResource("AtlasTexture_w1csp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dy4at")
+"texture": SubResource("AtlasTexture_vta2h")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_v4f50")
+"texture": SubResource("AtlasTexture_htxaa")
 }],
 "loop": true,
 "name": &"halfling_slinger",
@@ -484,24 +484,26 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_iykqa"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m4yrh"]
 size = Vector2(20, 15)
 
-[node name="CharacterBody" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "hitbox")]
+[node name="CharacterBody" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "body_shape", "hitbox", "hitbox_shape")]
 scale = Vector2(5, 5)
 script = ExtResource("1_kv04h")
-char_name = "goblin_archer"
 sprite = NodePath("CharacterSprite")
+body_shape = NodePath("CollisionShape2D")
 hitbox = NodePath("Area2D")
+hitbox_shape = NodePath("Area2D/CollisionShape2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_qm82i")
+shape = SubResource("RectangleShape2D_bs7wa")
+debug_color = Color(0.7, 0.536667, 0, 0.419608)
 
 [node name="CharacterSprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_iy41x")
-animation = &"lizard_beast"
+animation = &"halfling_slinger"
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_iykqa")
+shape = SubResource("RectangleShape2D_m4yrh")
