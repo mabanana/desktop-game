@@ -7,7 +7,7 @@ size = Vector2(8000, 300)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qw8h3"]
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("timer", "floor_body", "floor_body_shape", "screen_area", "screen_area_shape")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("timer", "floor_body", "floor_body_shape", "left_bound", "left_bound_shape", "right_bound", "right_bound_shape")]
 script = ExtResource("1_u5gi2")
 screen_height = 150
 spawn_cd = 0.5
@@ -16,8 +16,10 @@ ground_height_offset = 10
 timer = NodePath("Timer")
 floor_body = NodePath("FloorBody")
 floor_body_shape = NodePath("FloorBody/CollisionShape2D")
-screen_area = NodePath("GameArea")
-screen_area_shape = NodePath("GameArea/CollisionShape2D")
+left_bound = NodePath("LeftBound")
+left_bound_shape = NodePath("LeftBound/CollisionShape2D")
+right_bound = NodePath("RightBound")
+right_bound_shape = NodePath("RightBound/CollisionShape2D")
 
 [node name="FloorBody" type="StaticBody2D" parent="."]
 position = Vector2(0, 600)
@@ -25,10 +27,17 @@ position = Vector2(0, 600)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorBody"]
 shape = SubResource("RectangleShape2D_018mg")
 
-[node name="GameArea" type="Area2D" parent="."]
+[node name="RightBound" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GameArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBound"]
 shape = SubResource("RectangleShape2D_qw8h3")
+debug_color = Color(0.838049, 0.00120211, 0.927557, 0.42)
+
+[node name="LeftBound" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBound"]
+shape = SubResource("RectangleShape2D_qw8h3")
+debug_color = Color(0.862907, 0.000622427, 0.868379, 0.42)
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true

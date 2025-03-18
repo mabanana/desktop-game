@@ -12,14 +12,17 @@ func _init(main):
 
 func _on_body_leave_screen(body: Node2D):
 	if body is CharacterBody2D:
-		var x = 0 if body.team == 0 else  main.window_width
+		var x = 0 if body.team == 0 else main.window_width
 		body.position = Vector2i(x,  main.window_height)
 
 func spawn_character(char):
 	var node: CharacterBody = character_scene.instantiate()
 	node.character = char
 	if char.team != 0:
-		node.position.x = main.window_width
+		node.position = Vector2i(main.window_width, main.window_height)
+	else:
+		node.position.y = main.window_height
+		
 	main.add_child(node)
 
 func get_next_spawn():

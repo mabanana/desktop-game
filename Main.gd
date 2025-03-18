@@ -20,19 +20,21 @@ var game_controller: GameController
 @export var timer: Timer
 @export var floor_body: StaticBody2D
 @export var floor_body_shape: CollisionShape2D
-@export var screen_area: Area2D
-@export var screen_area_shape: CollisionShape2D
+@export var left_bound: Area2D
+@export var left_bound_shape: CollisionShape2D
+@export var right_bound: Area2D
+@export var right_bound_shape: CollisionShape2D
 
 var character_scene: PackedScene
 var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "goblin_occultist", "goblin_wolf_rider", "halfling_assassin", "halfling_bard", "halfling_ranger", "halfling_rogue", "halfling_slinger", "lizard_archer", "lizard_beast", "lizard_gladiator", "lizard_scout"]
 
 func _ready():
 	# TODO: Changing height in project settings does not scale game correctly
-	_initialize_window()
 	game_controller = GameController.new(self)
+	_initialize_window()
 	timer.timeout.connect(game_controller._on_spawn_cd_timeout)
 	timer.start(0)
-	screen_area.body_exited.connect(game_controller._on_body_leave_screen)
+	
 	#set_window_height_offset(100)
 
 func  _initialize_window():
@@ -53,8 +55,13 @@ func _update_window_size() -> void:
 	_update_floor_body()
 
 func _update_game_area():
-	screen_area_shape.shape.set_size(Vector2(window_width, window_height))
-	screen_area.position = Vector2(window_width, window_height) / 2
+	left_bound_shape.shape.size.y = window_height
+	left_bound.position.x = 0 - left_bound_shape.shape.size.x / 2 + 20
+	right_bound.position.x = window_width + right_bound_shape.shape.size.x / 2 - 20
+	left_bound.position.y += window_height / 2
+	right_bound.position.y += window_height / 2
+	right_bound.body_entered.connect(game_controller._on_body_leave_screen)
+	left_bound.body_entered.connect(game_controller._on_body_leave_screen)
 
 func _update_floor_body():
 	floor_body_shape.shape.set_size(Vector2(window_width * 2, 300))

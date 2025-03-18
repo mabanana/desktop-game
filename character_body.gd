@@ -6,11 +6,13 @@ var team: int
 var move_speed = 200.0
 var char_name: String
 var power: float
+var is_dead: bool = false
 
 @export var sprite: AnimatedSprite2D
 @export var body_shape: CollisionShape2D
 @export var hitbox: Area2D
 @export var hitbox_shape: CollisionShape2D
+@export var anim_player: AnimationPlayer
 
 func _ready():
 	if not character:
@@ -49,11 +51,11 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _on_collide_with_enemy(body):
-	if body.is_queued_for_deletion() or is_queued_for_deletion():
-		return
-	var winner
-	var loser
 	if body is CharacterBody and body.team != team:
+		if body.is_dead or is_dead:
+			return
+		var winner: CharacterBody
+		var loser: CharacterBody
 		if attack() > body.attack():
 			winner = self
 			loser = body
@@ -61,9 +63,17 @@ func _on_collide_with_enemy(body):
 			winner = body
 			loser = self
 		print("%s %s has been killed by %s" % [team, loser.char_name, winner.char_name])
-		loser.queue_free()
+		loser.die()
+		
 
 func attack():
 	var roll = randi_range(0, power)
 	print("%s attacked for %s" % [char_name, roll])
 	return roll
+
+func die():
+	is_dead = true
+	body_shape.position.y = 10000
+	anim_player.play("Death")
+	await anim_player.animation_finished
+	queue_free()
