@@ -33,3 +33,25 @@ func get_next_spawn():
 
 func _on_spawn_cd_timeout():
 	spawn_character(get_next_spawn())
+static func resolve_combat(atker, defer):
+	var winner: CharacterBody
+	var loser: CharacterBody
+	
+	var range_adv = max(0, atker.range - defer.range)
+	var atk_roll = atker.attack()
+	var def_roll = defer.attack()
+	if range_adv > def_roll:
+		print("%s hit %s with a ranged(%s) attack" % [atker.char_name, defer.char_name, range_adv])
+		winner = atker
+		loser = defer
+	elif atk_roll > def_roll:
+		winner = atker
+		loser = defer
+		# Lose some power on winning melee battle
+		var roll_diff = abs(def_roll - atk_roll)
+		winner.power = max(winner.power / 2, winner.power - roll_diff)
+	else:
+		winner = defer
+		loser = atker
+	print("%s %s(%s) has been killed by %s(%s)" % [winner.team, loser.char_name, min(atk_roll, def_roll), winner.char_name, max(atk_roll, def_roll)])
+	loser.die()

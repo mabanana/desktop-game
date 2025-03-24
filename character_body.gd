@@ -57,43 +57,20 @@ func _physics_process(delta):
 		velocity = direction * move_speed
 	else:
 		velocity = velocity.normalized() * move_toward(velocity.length(), 0, move_speed)
+	
 	move_and_slide()
 
 func _on_collide_with_enemy(body):
 	if body is CharacterBody and body.team != team:
 		if body.is_dead or is_dead:
 			return
-		var winner: CharacterBody
-		var loser: CharacterBody
-		var range_adv = max(0, range - body.range)
-		var attack_roll = attack()
-		var enemy_roll = body.attack()
-		
-		if range_adv > enemy_roll:
-			print("%s defeated %s with a ranged(%s) attack" % [char_name, body.char_name, range_adv])
-			winner = self
-			loser = body
-		elif attack_roll > enemy_roll:
-			winner = self
-			loser = body
-			# Lose some power on winning melee battle
-			var roll_diff = abs(enemy_roll - attack_roll)
-			winner.power = max(winner.power / 2, winner.power - roll_diff)
-		else:
-			winner = body
-			loser = self
-		print("%s %s(%s) has been killed by %s(%s)" % [winner.team, loser.char_name, min(attack_roll, enemy_roll), winner.char_name, max(attack_roll, enemy_roll)])
-		loser.die()
-		
-		
-		
+		GameController.resolve_combat(self, body)
 
 func attack():
 	var roll = randi_range(0, power)
 	return roll
 
 func die():
-	# TODO: activate shader only when dead
 	is_dead = true
 	body_shape.position.y = 10000
 	animate_death()
