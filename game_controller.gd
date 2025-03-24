@@ -28,7 +28,7 @@ func _on_body_leave_screen(body: Node2D):
 
 func spawn_character(char: Character):
 	var node: CharacterBody = character_scene.instantiate()
-	node.character = char
+	node.character = apply_upgrades(char)
 	if char.team != 0:
 		node.position = Vector2i(main.window_width, main.window_height)
 	else:
@@ -86,3 +86,6 @@ static func resolve_combat(atker, defer):
 		loser = atker
 	print("%s %s(%s) has been killed by %s(%s)" % [winner.team, loser.char_name, min(atk_roll, def_roll), winner.char_name, max(atk_roll, def_roll)])
 	loser.die()
+
+func apply_upgrades(char):
+	char.power += 10
