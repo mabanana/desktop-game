@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name CharacterBody
 
+signal combat_start
+
 var character: Character
 var team: int
 var move_speed: float
@@ -65,7 +67,7 @@ func _on_collide_with_enemy(body):
 	if body is CharacterBody and body.team != team:
 		if body.is_dead or is_dead:
 			return
-		GameController.resolve_combat(self, body)
+		combat_start.emit(self, body)
 
 func attack():
 	var roll = randi_range(0, power)

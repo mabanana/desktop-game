@@ -37,7 +37,7 @@ func spawn_character(char: Character):
 		node.position = Vector2i(main.window_width, main.window_height)
 	else:
 		node.position.y = main.window_height
-		
+	node.combat_start.connect(resolve_combat)
 	main.add_child(node)
 
 func get_next_spawn():
@@ -68,7 +68,7 @@ func get_player_unit():
 		print("Player ran out of units")
 	return char_name
 
-static func resolve_combat(atker: CharacterBody, defer: CharacterBody):
+func resolve_combat(atker: CharacterBody, defer: CharacterBody):
 	var winner: CharacterBody
 	var loser: CharacterBody
 	
