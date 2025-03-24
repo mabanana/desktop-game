@@ -72,9 +72,9 @@ func resolve_combat(atker: CharacterBody, defer: CharacterBody):
 	var winner: CharacterBody
 	var loser: CharacterBody
 	
-	var range_adv = max(0, atker.range - defer.range)
-	var atk_roll = atker.attack()
-	var def_roll = defer.attack()
+	var range_adv = max(0, atker.range - defer.range)	
+	var atk_roll = atker.attack() + get_attack_modifier(atker, defer)
+	var def_roll = defer.attack() + get_attack_modifier(defer, atker)
 
 	if range_adv > def_roll:
 		print("%s hit %s with a ranged(%s) attack" % [atker.char_name, defer.char_name, range_adv])
@@ -97,3 +97,13 @@ func apply_upgrades(char):
 		for up in player_upgrades:
 			up.apply_upgrades(char)
 	return char
+
+func get_attack_modifier(atker, defer):
+	var total = 0
+	for up in player_upgrades:
+		var modifier = up.combat_modifier(atker.character, defer.character)
+		if modifier:
+			print("%s has +%s from %s %s" %
+			[atker.char_name, modifier, up.name, up.tier])
+		total += modifier
+	return total
