@@ -3,9 +3,10 @@ class_name CharacterBody
 
 var character: Character
 var team: int
-var move_speed = 200.0
+var move_speed: float
 var char_name: String
 var power: float
+var range: float
 var is_dead: bool = false
 var death_material: ShaderMaterial
 var death_time: float = 0.8
@@ -24,6 +25,7 @@ func _ready():
 	team = character.team
 	move_speed = character.move_speed
 	power = character.power
+	range = character.range
 	death_material = sprite.material
 	death_material.setup_local_to_scene()
 	sprite.set_material(null)
@@ -63,19 +65,31 @@ func _on_collide_with_enemy(body):
 			return
 		var winner: CharacterBody
 		var loser: CharacterBody
-		if attack() > body.attack():
+		var range_adv = max(0, range - body.range)
+		var attack_roll = attack()
+		var enemy_roll = body.attack()
+		
+		if range_adv > enemy_roll:
+			print("%s defeated %s with a ranged(%s) attack" % [char_name, body.char_name, range_adv])
 			winner = self
 			loser = body
+		elif attack_roll > enemy_roll:
+			winner = self
+			loser = body
+			# Lose some power on winning melee battle
+			var roll_diff = abs(enemy_roll - attack_roll)
+			winner.power = max(winner.power / 2, winner.power - roll_diff)
 		else:
 			winner = body
 			loser = self
-		print("%s %s has been killed by %s" % [team, loser.char_name, winner.char_name])
+		print("%s %s(%s) has been killed by %s(%s)" % [winner.team, loser.char_name, min(attack_roll, enemy_roll), winner.char_name, max(attack_roll, enemy_roll)])
 		loser.die()
+		
+		
 		
 
 func attack():
 	var roll = randi_range(0, power)
-	print("%s attacked for %s" % [char_name, roll])
 	return roll
 
 func die():

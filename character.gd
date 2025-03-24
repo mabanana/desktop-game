@@ -2,7 +2,7 @@ class_name Character
 
 var char_name: String
 var team: int
-var move_speed: float = 200.0
+var move_speed: float = 100.0
 var power: float = 20
 var range: float = 4
 var key_words = []
@@ -37,6 +37,7 @@ func _init(char_name, team):
 		"goblin_occultist":
 			power += 28  # Magic users tend to be strong but fragile
 			range += 6
+			move_speed -= 20
 			key_words.append(KeyWord.GOBLIN)
 			key_words.append(KeyWord.RANGED)
 			key_words.append(KeyWord.MAGIC)
@@ -44,6 +45,7 @@ func _init(char_name, team):
 		"goblin_wolf_rider":
 			power += 30  # Mounted units usually have extra mobility and attack
 			range += 2
+			move_speed += 50
 			key_words.append(KeyWord.GOBLIN)
 			key_words.append(KeyWord.MELEE)
 		"halfling_assassin":
@@ -62,6 +64,7 @@ func _init(char_name, team):
 			key_words.append(KeyWord.MELEE)
 		"halfling_rogue":
 			power += 26  # Sneaky, high-damage melee
+			move_speed += 20
 			key_words.append(KeyWord.MELEE)
 		"halfling_slinger":
 			power += 19  # Ranged but weaker than a ranger
@@ -73,6 +76,7 @@ func _init(char_name, team):
 			key_words.append(KeyWord.RANGED)
 		"lizard_beast":
 			power += 35  # Likely a brute force tank
+			move_speed -= 20
 			key_words.append(KeyWord.MELEE)
 		"lizard_gladiator":
 			power += 32  # Skilled melee fighter
@@ -80,6 +84,7 @@ func _init(char_name, team):
 		"lizard_scout":
 			power += 21  # Agile but lower power
 			range += 6
+			move_speed += 10
 			key_words.append(KeyWord.MELEE)
 			key_words.append(KeyWord.RANGED)
 			key_words.append(KeyWord.SUPPORT)
