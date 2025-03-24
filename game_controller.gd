@@ -10,6 +10,10 @@ var player_units = {
 	"goblin_wolf_rider" : 15,
 	"goblin_fanatic": 10,
 }
+var player_upgrades: Array[Upgrade] = [
+	FightDirtyUpgrade.new(2),
+	WolfBreedingUpgrade.new(1),
+]
 var advantage: int = 4
 var score = 0
 
@@ -64,13 +68,14 @@ func get_player_unit():
 		print("Player ran out of units")
 	return char_name
 
-static func resolve_combat(atker, defer):
+static func resolve_combat(atker: CharacterBody, defer: CharacterBody):
 	var winner: CharacterBody
 	var loser: CharacterBody
 	
 	var range_adv = max(0, atker.range - defer.range)
 	var atk_roll = atker.attack()
 	var def_roll = defer.attack()
+
 	if range_adv > def_roll:
 		print("%s hit %s with a ranged(%s) attack" % [atker.char_name, defer.char_name, range_adv])
 		winner = atker
@@ -88,4 +93,7 @@ static func resolve_combat(atker, defer):
 	loser.die()
 
 func apply_upgrades(char):
-	char.power += 10
+	if char.team == 0:
+		for up in player_upgrades:
+			up.apply_upgrades(char)
+	return char
