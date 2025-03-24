@@ -6,6 +6,10 @@ var tier: int
 
 func _init(tier):
 	self.tier = tier
+	_ready()
+
+func _ready():
+	pass
 
 func apply_upgrades(char: Character):
 	pass
