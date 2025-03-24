@@ -1,7 +1,8 @@
-[gd_scene load_steps=90 format=3 uid="uid://cwvkbn6r8ewk7"]
+[gd_scene load_steps=79 format=3 uid="uid://cwvkbn6r8ewk7"]
 
 [ext_resource type="Script" path="res://character_body.gd" id="1_kv04h"]
 [ext_resource type="Texture2D" uid="uid://dutcmd84msfei" path="res://Assets/GoblinArcher.png" id="2_kb15p"]
+[ext_resource type="Material" uid="uid://dgqejt3hesopc" path="res://Assets/death_shader.tres" id="2_umbkc"]
 [ext_resource type="Texture2D" uid="uid://cin2qkp2xygbu" path="res://Assets/HalflingAssassin.png" id="3_bl6ij"]
 [ext_resource type="Texture2D" uid="uid://bhiwvl5o0allh" path="res://Assets/GoblinFanatic.png" id="3_qs6m5"]
 [ext_resource type="Texture2D" uid="uid://o8w15qt8c63s" path="res://Assets/GoblinFighter.png" id="4_235ok"]
@@ -18,177 +19,6 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bs7wa"]
 size = Vector2(12, 12)
-
-[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_sse80"]
-constant = Color(0.53, 0.0954, 0.102643, 1)
-
-[sub_resource type="VisualShaderNodeColorOp" id="VisualShaderNodeColorOp_bl1g8"]
-operator = 4
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_dylqv"]
-input_name = "color"
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_1lomb"]
-function = 15
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_hjg01"]
-input_name = "time"
-
-[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_0bdxp"]
-function = 0
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_jua6v"]
-default_input_values = [0, 0.0, 1, 20.0]
-operator = 2
-
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ba388"]
-default_input_values = [0, 0.5, 1, 0.0]
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_n1f0k"]
-input_name = "color"
-
-[sub_resource type="VisualShaderNodeColorOp" id="VisualShaderNodeColorOp_vpvym"]
-operator = 4
-
-[sub_resource type="VisualShader" id="VisualShader_h23w4"]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-
-
-
-void fragment() {
-// Input:8
-	vec4 n_out8p0 = COLOR;
-
-
-// Input:2
-	float n_out2p0 = TIME;
-
-
-// FloatOp:5
-	float n_in5p1 = 20.00000;
-	float n_out5p0 = n_out2p0 * n_in5p1;
-
-
-// FloatFunc:3
-	float n_out3p0 = sin(n_out5p0);
-
-
-// FloatOp:6
-	float n_in6p0 = 0.50000;
-	float n_out6p0 = n_in6p0 + n_out3p0;
-
-
-// ColorConstant:10
-	vec4 n_out10p0 = vec4(0.530000, 0.095400, 0.102643, 1.000000);
-
-
-	vec3 n_out11p0;
-// ColorOp:11
-	{
-		float base = vec3(n_out6p0).x;
-		float blend = vec3(n_out10p0.xyz).x;
-		if (base < 0.5) {
-			n_out11p0.x = 2.0 * base * blend;
-		} else {
-			n_out11p0.x = 1.0 - 2.0 * (1.0 - blend) * (1.0 - base);
-		}
-	}
-	{
-		float base = vec3(n_out6p0).y;
-		float blend = vec3(n_out10p0.xyz).y;
-		if (base < 0.5) {
-			n_out11p0.y = 2.0 * base * blend;
-		} else {
-			n_out11p0.y = 1.0 - 2.0 * (1.0 - blend) * (1.0 - base);
-		}
-	}
-	{
-		float base = vec3(n_out6p0).z;
-		float blend = vec3(n_out10p0.xyz).z;
-		if (base < 0.5) {
-			n_out11p0.z = 2.0 * base * blend;
-		} else {
-			n_out11p0.z = 1.0 - 2.0 * (1.0 - blend) * (1.0 - base);
-		}
-	}
-
-
-	vec3 n_out9p0;
-// ColorOp:9
-	{
-		float base = vec3(n_out8p0.xyz).x;
-		float blend = n_out11p0.x;
-		if (base < 0.5) {
-			n_out9p0.x = 2.0 * base * blend;
-		} else {
-			n_out9p0.x = 1.0 - 2.0 * (1.0 - blend) * (1.0 - base);
-		}
-	}
-	{
-		float base = vec3(n_out8p0.xyz).y;
-		float blend = n_out11p0.y;
-		if (base < 0.5) {
-			n_out9p0.y = 2.0 * base * blend;
-		} else {
-			n_out9p0.y = 1.0 - 2.0 * (1.0 - blend) * (1.0 - base);
-		}
-	}
-	{
-		float base = vec3(n_out8p0.xyz).z;
-		float blend = n_out11p0.z;
-		if (base < 0.5) {
-			n_out9p0.z = 2.0 * base * blend;
-		} else {
-			n_out9p0.z = 1.0 - 2.0 * (1.0 - blend) * (1.0 - base);
-		}
-	}
-
-
-// Input:12
-	vec4 n_out12p0 = COLOR;
-
-
-// FloatFunc:13
-	float n_out13p0 = round(n_out12p0.x);
-
-
-// Output:0
-	COLOR.rgb = n_out9p0;
-	COLOR.a = n_out13p0;
-
-
-}
-"
-graph_offset = Vector2(-946.773, 186.88)
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2(440, 140)
-nodes/fragment/2/node = SubResource("VisualShaderNodeInput_hjg01")
-nodes/fragment/2/position = Vector2(-720, 260)
-nodes/fragment/3/node = SubResource("VisualShaderNodeFloatFunc_0bdxp")
-nodes/fragment/3/position = Vector2(-440, 400)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_jua6v")
-nodes/fragment/5/position = Vector2(-420, 240)
-nodes/fragment/6/node = SubResource("VisualShaderNodeFloatOp_ba388")
-nodes/fragment/6/position = Vector2(-220, 320)
-nodes/fragment/8/node = SubResource("VisualShaderNodeInput_n1f0k")
-nodes/fragment/8/position = Vector2(-280, 140)
-nodes/fragment/9/node = SubResource("VisualShaderNodeColorOp_vpvym")
-nodes/fragment/9/position = Vector2(220, 180)
-nodes/fragment/10/node = SubResource("VisualShaderNodeColorConstant_sse80")
-nodes/fragment/10/position = Vector2(-220, 220)
-nodes/fragment/11/node = SubResource("VisualShaderNodeColorOp_bl1g8")
-nodes/fragment/11/position = Vector2(0, 280)
-nodes/fragment/12/node = SubResource("VisualShaderNodeInput_dylqv")
-nodes/fragment/12/position = Vector2(-120, 420)
-nodes/fragment/13/node = SubResource("VisualShaderNodeFloatFunc_1lomb")
-nodes/fragment/13/position = Vector2(200, 340)
-nodes/fragment/connections = PackedInt32Array(2, 0, 5, 0, 5, 0, 3, 0, 3, 0, 6, 1, 6, 0, 11, 0, 11, 0, 9, 1, 10, 0, 11, 1, 8, 0, 9, 0, 9, 0, 0, 0, 12, 0, 13, 0, 13, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_el2fj"]
-shader = SubResource("VisualShader_h23w4")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h43o0"]
 atlas = ExtResource("2_kb15p")
@@ -665,26 +495,26 @@ step = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:speed_scale")
+tracks/0/path = NodePath("CharacterSprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.5, 1.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CharacterSprite:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.25, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 0.710667, 0.69, 0.717647), Color(1, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CharacterSprite:speed_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 1.0]
 }
 
 [sub_resource type="Animation" id="Animation_7fgrg"]
@@ -692,26 +522,26 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:speed_scale")
+tracks/0/path = NodePath("CharacterSprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CharacterSprite:modulate")
+tracks/1/path = NodePath("CharacterSprite:speed_scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gds6a"]
@@ -735,9 +565,9 @@ shape = SubResource("RectangleShape2D_bs7wa")
 debug_color = Color(0.7, 0.536667, 0, 0.419608)
 
 [node name="CharacterSprite" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_el2fj")
+material = ExtResource("2_umbkc")
 sprite_frames = SubResource("SpriteFrames_iy41x")
-animation = &"halfling_slinger"
+animation = &"lizard_scout"
 
 [node name="Area2D" type="Area2D" parent="."]
 
