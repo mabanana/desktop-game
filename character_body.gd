@@ -18,9 +18,10 @@ var death_time: float = 0.8
 @export var anim_player: AnimationPlayer
 
 func _ready():
-	if not character:
+	if not character or not character.char_name:
 		print("No character resource on CharacterBody, Freeing.")
 		queue_free()
+		return
 	char_name = character.char_name
 	team = character.team
 	move_speed = character.move_speed
