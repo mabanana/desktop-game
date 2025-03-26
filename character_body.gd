@@ -45,7 +45,7 @@ func setup_collisions():
 	hitbox_shape.shape = RectangleShape2D.new()
 	var hitbox_size = sprite_size
 	hitbox_size.y += 4
-	hitbox_size.x += character.range
+	hitbox_size.x += 4
 	hitbox_shape.shape.size = hitbox_size
 	if team != 0:
 		sprite.flip_h = true
