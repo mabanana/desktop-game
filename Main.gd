@@ -31,8 +31,10 @@ var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "gobl
 
 func _ready():
 	# TODO: Changing height in project settings does not scale game correctly
+	get_viewport().set_embedding_subwindows(false)
 	_initialize_window()
 	#set_window_height_offset(100)
+	create_new_window(false)
 
 func  _initialize_window():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
@@ -83,3 +85,22 @@ func _update_floor_tiles():
 	print(floor_body_shape.shape.get_rect().size.y / 2)
 	pos.y += tile_map_height - floor_body_shape.shape.get_rect().size.y / 2
 	tilemap.position = pos
+
+func create_new_window(hidden = true):
+	var window = Window.new()
+	window.visible = not hidden
+	
+	# TODO: Scale size with contents
+	window.size = Vector2(300, 100)
+	
+	window.position = Vector2(window_width, screen_rect.size.y) / 2
+	window.position += DisplayServer.screen_get_usable_rect().position
+	window.position += window.size / 2 * -1
+	
+	window.set_flag(Window.FLAG_ALWAYS_ON_TOP, true)
+	
+	window.close_requested.connect(window.hide)
+	
+	add_child(window)
+	
+	
