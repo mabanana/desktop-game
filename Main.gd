@@ -7,9 +7,9 @@ var screen_rect: Rect2
 var taskbar_height: int
 var window_offset: int
 
-var game_controller: GameController
 
-@export_category("Game Parameters")
+
+@export_category("Screen Parameters")
 @export var screen_height: int
 @export var spawn_cd: float
 @export var x_padding: int
@@ -17,7 +17,8 @@ var game_controller: GameController
 
 
 @export_category("Child Nodes")
-@export var timer: Timer
+@export var tilemap: TileMapLayer
+@export var game_controller: GameController
 @export var floor_body: StaticBody2D
 @export var floor_body_shape: CollisionShape2D
 @export var left_bound: Area2D
@@ -30,11 +31,7 @@ var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "gobl
 
 func _ready():
 	# TODO: Changing height in project settings does not scale game correctly
-	game_controller = GameController.new(self)
 	_initialize_window()
-	timer.timeout.connect(game_controller._on_spawn_cd_timeout)
-	timer.start(0)
-	
 	#set_window_height_offset(100)
 
 func  _initialize_window():
@@ -53,6 +50,7 @@ func _update_window_size() -> void:
 	_update_screen_position()
 	_update_game_area()
 	_update_floor_body()
+	_update_floor_tiles()
 
 func _update_game_area():
 	left_bound_shape.shape.size.y = window_height
@@ -78,3 +76,10 @@ func set_window_height_offset(value: float = 0) -> void:
 	value = int(value)
 	window_offset = value
 	_update_screen_position()
+
+func _update_floor_tiles():
+	var pos = floor_body.position
+	var tile_map_height = 144
+	print(floor_body_shape.shape.get_rect().size.y / 2)
+	pos.y += tile_map_height - floor_body_shape.shape.get_rect().size.y / 2
+	tilemap.position = pos

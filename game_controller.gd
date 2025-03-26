@@ -1,8 +1,8 @@
 extends Node
 class_name GameController
 
-var main: Main
-
+@export var main: Main
+@export var spawn_cd: float
 var character_scene: PackedScene
 var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "goblin_occultist", "goblin_wolf_rider", "halfling_assassin", "halfling_bard", "halfling_ranger", "halfling_rogue", "halfling_slinger", "lizard_archer", "lizard_beast", "lizard_gladiator", "lizard_scout"]
 
@@ -10,16 +10,20 @@ var player_units = {
 	"goblin_wolf_rider" : 15,
 	"goblin_fanatic": 10,
 }
+
 var player_upgrades: Array[Upgrade] = [
 	FightDirtyUpgrade.new(2),
 	WolfBreedingUpgrade.new(1),
 ]
+
 var advantage: int = 4
 var score = 0
 
-func _init(main):
-	self.main = main
+func _init():
 	character_scene = preload("res://character_body.tscn")
+
+func _ready():
+	_on_spawn_cd_timeout()
 
 func _on_body_leave_screen(body: Node2D):
 	if body is CharacterBody2D:
@@ -54,6 +58,7 @@ func _on_spawn_cd_timeout():
 	if not spawn.char_name:
 		return
 	spawn_character(spawn)
+	get_tree().create_timer(1/spawn_cd).timeout.connect(_on_spawn_cd_timeout)
 
 func get_player_unit():
 	var unit_list = player_units.keys()
