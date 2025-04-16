@@ -35,7 +35,6 @@ func _initialize_window():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)
-	# TODO: Setup mouse passthrough
 	_update_window_size()
 
 func _update_window_size() -> void:
@@ -96,4 +95,76 @@ func create_new_window(hidden = true):
 	
 	add_child(window)
 	
+func update_mouse_passthrough():
+	screen_rect = DisplayServer.screen_get_usable_rect()
+	var polygon_array: Array = []
+	var floor_array = get_floor_vec2_array()
 	
+	for char in game_controller.character_body_hash.values():
+		var char_poly = get_polygon(char.sprite)
+		polygon_array.append(char_poly)
+	
+	
+	polygon_array.sort_custom(func(a, b):
+		return a[0].x <= b[0].x
+		)
+	polygon_array.slice(1)
+	var packed_polygon_array: PackedVector2Array = []
+	packed_polygon_array.append_array(floor_array.slice(0,2))
+	
+	for packed_arr in polygon_array:
+		if packed_arr[0].x <= packed_polygon_array[-1].x:
+			packed_polygon_array.remove_at(len(packed_polygon_array) - 1)
+			var ceiling = min(packed_arr[1].y, packed_polygon_array[-1].y)
+			packed_polygon_array[-1].y = ceiling
+			packed_polygon_array.append(packed_arr[1])
+			packed_polygon_array[-1].y = ceiling
+			packed_polygon_array.append(packed_arr[2])
+			packed_polygon_array[-1].y = ceiling
+			packed_polygon_array.append(packed_arr[3])
+		else:
+			packed_polygon_array.append_array(packed_arr)
+		
+	packed_polygon_array.append_array(floor_array.slice(2,4))
+	$Polygon2D.polygon = packed_polygon_array
+	DisplayServer.window_set_mouse_passthrough(packed_polygon_array)
+	
+func get_polygon(sprite: AnimatedSprite2D):
+	var sprite_texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	var sprite_size = Vector2(sprite_texture.get_width(), sprite_texture.get_height()) * sprite_texture.get_size().x / 2
+	
+	
+	var floor_y = floor_body_shape.shape.get_rect().position.y + floor_body.position.y
+	var y_max = floor_y - sprite_size.y
+	
+	var top_left: Vector2 = sprite.global_position - sprite_size / 2
+	top_left.y = min(floor_y - sprite_size.y, top_left.y)
+	var bottom_right = Vector2(
+		top_left.x + sprite_size.x, 
+		floor_y
+	)
+	
+	var texture_corners: PackedVector2Array = [
+	Vector2(top_left.x, bottom_right.y), # Bottom left
+	top_left, # Top left
+	Vector2(bottom_right.x, top_left.y) , # Top right
+	bottom_right, # Bottom right
+	]
+	
+	return texture_corners
+
+func get_floor_vec2_array():
+	var rect = floor_body_shape.shape.get_rect()
+	var pos = rect.position + floor_body.position
+	var end = rect.end + floor_body.position
+	
+	return [
+		Vector2(pos.x, end.y), # Bottom Left
+		pos, # Top Left
+		Vector2(end.x, pos.y), # Top Right
+		end, # Bottom Right
+		]
+	
+func _process(delta):
+	#TODO: update less frequently
+	update_mouse_passthrough()

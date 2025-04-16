@@ -181,9 +181,7 @@ size = Vector2(8000, 300)
 
 [node name="Main" type="Node2D" node_paths=PackedStringArray("tilemap", "game_controller", "floor_body", "floor_body_shape", "left_bound", "left_bound_shape", "right_bound", "right_bound_shape")]
 script = ExtResource("1_u5gi2")
-screen_height = 150
-spawn_cd = 0.5
-x_padding = 12
+screen_height = 500
 ground_height_offset = 10
 tilemap = NodePath("TileMapLayer")
 game_controller = NodePath("GameController")
@@ -201,7 +199,7 @@ tile_set = SubResource("TileSet_cws07")
 [node name="GameController" type="Node" parent="." node_paths=PackedStringArray("main")]
 script = ExtResource("2_881uo")
 main = NodePath("..")
-spawn_cd = 0.5
+spawn_cd = 1.0
 
 [node name="FloorBody" type="StaticBody2D" parent="."]
 position = Vector2(0, 600)
@@ -220,3 +218,7 @@ debug_color = Color(0.838049, 0.00120211, 0.927557, 0.42)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBound"]
 shape = SubResource("RectangleShape2D_qw8h3")
 debug_color = Color(0.862907, 0.000622427, 0.868379, 0.42)
+
+[node name="Polygon2D" type="CollisionPolygon2D" parent="."]
+modulate = Color(1, 0.48, 0.48, 0.427451)
+top_level = true
