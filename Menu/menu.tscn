@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctw0dfap5gciv"]
+[gd_scene load_steps=3 format=3 uid="uid://ctw0dfap5gciv"]
+
+[ext_resource type="Script" path="res://Menu/main_menu.gd" id="1_etu7s"]
 
 [sub_resource type="Theme" id="Theme_ghoq8"]
 HBoxContainer/constants/separation = 15
@@ -8,6 +10,7 @@ MarginContainer/constants/margin_right = 5
 MarginContainer/constants/margin_top = 5
 
 [node name="MenuScreen" type="Node2D"]
+script = ExtResource("1_etu7s")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

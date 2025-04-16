@@ -83,23 +83,12 @@ func _update_floor_tiles():
 	tilemap.position = pos
 
 func create_new_window(packed_scene, hidden = true):
-	var window = Window.new()
+	var window = GameWindow.new(self, packed_scene)
 	window.visible = not hidden
-	
-	# TODO: Have size as a saved setting
-	window.size = Vector2(500, 300)
-	
 	window.position = Vector2(window_width, screen_rect.size.y) / 2
 	window.position += DisplayServer.screen_get_usable_rect().position
 	window.position += window.size / 2 * -1
-	
-	window.set_flag(Window.FLAG_ALWAYS_ON_TOP, true)
-	
-	window.close_requested.connect(window.hide)
-	
 	add_child(window)
-	window.add_child(packed_scene.instantiate())
-	
 	return window
 	
 func update_mouse_passthrough():
