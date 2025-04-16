@@ -7,14 +7,10 @@ var screen_rect: Rect2
 var taskbar_height: int
 var window_offset: int
 
-
-
 @export_category("Screen Parameters")
 @export var screen_height: int
-@export var spawn_cd: float
 @export var x_padding: int
 @export var ground_height_offset: int
-
 
 @export_category("Child Nodes")
 @export var tilemap: TileMapLayer
@@ -26,17 +22,15 @@ var window_offset: int
 @export var right_bound: Area2D
 @export var right_bound_shape: CollisionShape2D
 
-var character_scene: PackedScene
-var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "goblin_occultist", "goblin_wolf_rider", "halfling_assassin", "halfling_bard", "halfling_ranger", "halfling_rogue", "halfling_slinger", "lizard_archer", "lizard_beast", "lizard_gladiator", "lizard_scout"]
 
 func _ready():
-	# TODO: Changing height in project settings does not scale game correctly
 	get_viewport().set_embedding_subwindows(false)
 	_initialize_window()
-	#set_window_height_offset(100)
+	
 	create_new_window(false)
 
-func  _initialize_window():
+
+func _initialize_window():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
@@ -82,7 +76,6 @@ func set_window_height_offset(value: float = 0) -> void:
 func _update_floor_tiles():
 	var pos = floor_body.position
 	var tile_map_height = 144
-	print(floor_body_shape.shape.get_rect().size.y / 2)
 	pos.y += tile_map_height - floor_body_shape.shape.get_rect().size.y / 2
 	tilemap.position = pos
 

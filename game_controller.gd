@@ -17,15 +17,14 @@ var player_upgrades: Array[Upgrade] = [
 	FightDirtyUpgrade.new(2),
 	WolfBreedingUpgrade.new(1),
 ]
-var advantage: int = 4
+var advantage: int = 0
 var score = 0
 
 func _init():
 	character_scene = preload("res://character_body.tscn")
 
 func _ready():
-	_on_spawn_cd_timeout()
-
+	get_tree().create_timer(1/spawn_cd).timeout.connect(_on_spawn_cd_timeout)
 func _on_body_leave_screen(body: Node2D):
 	if body is CharacterBody2D:
 		if body.team == 0 and body.position.x > 20:
@@ -39,15 +38,16 @@ func spawn_character(char: Character):
 	var node: CharacterBody = character_scene.instantiate()
 	node.character = apply_upgrades(char)
 	if char.team != 0:
-		node.position = Vector2i(main.window_width, main.window_height)
+		node.position = Vector2i(main.window_width, main.floor_body.position.y)
 	else:
-		node.position.y = main.window_height
+		node.position.y = main.floor_body.position.y
 	node.combat_start.connect(resolve_combat)
 	id_counter += 1
 	node.id = id_counter
 	character_body_hash[id_counter] = node
 	node.character_died.connect(func():
-		character_body_hash.erase(node.id))
+		character_body_hash.erase(node.id)
+		node.queue_free())
 	main.add_child(node)
 
 func get_next_spawn():

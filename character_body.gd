@@ -25,6 +25,7 @@ signal character_died
 func _ready():
 	if not character or not character.char_name:
 		print("No character resource on CharacterBody, Freeing.")
+		character_died.emit()
 		queue_free()
 		return
 	char_name = character.char_name
@@ -79,7 +80,6 @@ func attack():
 func die():
 	is_dead = true
 	body_shape.position.y = 10000
-	character_died.emit()
 	animate_death()
 	
 func animate_death():
@@ -89,5 +89,5 @@ func animate_death():
 	tween.tween_property(sprite, "position", Vector2(0, -10), death_time/2)
 	tween.chain().tween_property(sprite, "position", Vector2(0, 30), death_time/2)
 	tween.play()
-	get_tree().create_timer(death_time).timeout.connect(queue_free)
+	get_tree().create_timer(death_time).timeout.connect(character_died.emit)
 	
