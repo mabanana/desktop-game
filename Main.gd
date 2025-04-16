@@ -8,12 +8,15 @@ var taskbar_height: int
 var window_offset: int
 var last_passthrough_update: float
 
+var menu_window: Window
+
 @export_category("Screen Parameters")
 @export var screen_height: int
 @export var x_padding: int
 @export var ground_height_offset: int
 @export var passthrough_update_rate: float
 
+# TODO: slim down this class, move logic into child nodes
 @export_category("Child Nodes")
 @export var tilemap: TileMapLayer
 @export var game_controller: GameController
@@ -23,14 +26,13 @@ var last_passthrough_update: float
 @export var left_bound_shape: CollisionShape2D
 @export var right_bound: Area2D
 @export var right_bound_shape: CollisionShape2D
+@export var menu_scene: PackedScene
 
 
 func _ready():
 	get_viewport().set_embedding_subwindows(false)
 	_initialize_window()
-	
-	create_new_window(false)
-
+	menu_window = create_new_window(menu_scene, false)
 
 func _initialize_window():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
@@ -80,12 +82,12 @@ func _update_floor_tiles():
 	pos.y += tile_map_height - floor_body_shape.shape.get_rect().size.y / 2
 	tilemap.position = pos
 
-func create_new_window(hidden = true):
+func create_new_window(packed_scene, hidden = true):
 	var window = Window.new()
 	window.visible = not hidden
 	
-	# TODO: Scale size with contents
-	window.size = Vector2(300, 100)
+	# TODO: Have size as a saved setting
+	window.size = Vector2(500, 300)
 	
 	window.position = Vector2(window_width, screen_rect.size.y) / 2
 	window.position += DisplayServer.screen_get_usable_rect().position
@@ -96,6 +98,9 @@ func create_new_window(hidden = true):
 	window.close_requested.connect(window.hide)
 	
 	add_child(window)
+	window.add_child(packed_scene.instantiate())
+	
+	return window
 	
 func update_mouse_passthrough():
 	screen_rect = DisplayServer.screen_get_usable_rect()
