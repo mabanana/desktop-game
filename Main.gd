@@ -6,11 +6,13 @@ var window_height: int
 var screen_rect: Rect2
 var taskbar_height: int
 var window_offset: int
+var last_passthrough_update: float
 
 @export_category("Screen Parameters")
 @export var screen_height: int
 @export var x_padding: int
 @export var ground_height_offset: int
+@export var passthrough_update_rate: float
 
 @export_category("Child Nodes")
 @export var tilemap: TileMapLayer
@@ -167,4 +169,7 @@ func get_floor_vec2_array():
 	
 func _process(delta):
 	#TODO: update less frequently
-	update_mouse_passthrough()
+	last_passthrough_update += delta
+	if last_passthrough_update > 1 / passthrough_update_rate:
+		update_mouse_passthrough()
+		last_passthrough_update = 0

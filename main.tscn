@@ -183,6 +183,7 @@ size = Vector2(8000, 300)
 script = ExtResource("1_u5gi2")
 screen_height = 500
 ground_height_offset = 10
+passthrough_update_rate = 15.0
 tilemap = NodePath("TileMapLayer")
 game_controller = NodePath("GameController")
 floor_body = NodePath("FloorBody")
