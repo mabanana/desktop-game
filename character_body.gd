@@ -3,6 +3,7 @@ class_name CharacterBody
 
 signal combat_start
 
+var id: int
 var character: Character
 var team: int
 var move_speed: float
@@ -18,6 +19,8 @@ var death_time: float = 0.8
 @export var hitbox: Area2D
 @export var hitbox_shape: CollisionShape2D
 @export var anim_player: AnimationPlayer
+
+signal character_died
 
 func _ready():
 	if not character or not character.char_name:
@@ -76,6 +79,7 @@ func attack():
 func die():
 	is_dead = true
 	body_shape.position.y = 10000
+	character_died.emit()
 	animate_death()
 	
 func animate_death():

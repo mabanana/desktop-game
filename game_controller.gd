@@ -6,16 +6,17 @@ class_name GameController
 var character_scene: PackedScene
 var char_name_list = ["goblin_archer", "goblin_fanatic", "goblin_fighter", "goblin_occultist", "goblin_wolf_rider", "halfling_assassin", "halfling_bard", "halfling_ranger", "halfling_rogue", "halfling_slinger", "lizard_archer", "lizard_beast", "lizard_gladiator", "lizard_scout"]
 
+var character_body_hash = {}
+var id_counter = 1
+
 var player_units = {
 	"goblin_wolf_rider" : 15,
 	"goblin_fanatic": 10,
 }
-
 var player_upgrades: Array[Upgrade] = [
 	FightDirtyUpgrade.new(2),
 	WolfBreedingUpgrade.new(1),
 ]
-
 var advantage: int = 4
 var score = 0
 
@@ -42,6 +43,11 @@ func spawn_character(char: Character):
 	else:
 		node.position.y = main.window_height
 	node.combat_start.connect(resolve_combat)
+	id_counter += 1
+	node.id = id_counter
+	character_body_hash[id_counter] = node
+	node.character_died.connect(func():
+		character_body_hash.erase(node.id))
 	main.add_child(node)
 
 func get_next_spawn():
