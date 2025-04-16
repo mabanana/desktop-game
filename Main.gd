@@ -168,7 +168,6 @@ func get_floor_vec2_array():
 		]
 	
 func _process(delta):
-	#TODO: update less frequently
 	last_passthrough_update += delta
 	if last_passthrough_update > 1 / passthrough_update_rate:
 		update_mouse_passthrough()
